@@ -3,6 +3,7 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import Navbar from './components/Navbar'
 import Dashboard from './pages/dashboard'
+import Analyze from './pages/Analyze'
 function App() {
   return (
     <BrowserRouter>
@@ -12,6 +13,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/dashboard" element= {<Dashboard/>} />
+        <Route path="/analyze" element={<Analyze />} />
       </Routes>
     </BrowserRouter>
   )
