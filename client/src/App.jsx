@@ -4,6 +4,7 @@ import Register from './pages/Register'
 import Navbar from './components/Navbar'
 import Dashboard from './pages/dashboard'
 import Analyze from './pages/Analyze'
+import History from './pages/History'
 function App() {
   return (
     <BrowserRouter>
@@ -14,6 +15,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/dashboard" element= {<Dashboard/>} />
         <Route path="/analyze" element={<Analyze />} />
+        <Route path="/history"element={<History />} />
       </Routes>
     </BrowserRouter>
   )

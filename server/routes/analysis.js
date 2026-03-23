@@ -39,4 +39,14 @@ router.post('/run', authmid, upload.single('resume'), async (req, res) => {
   }
 })
 
+router.get('/history' , authmid, async(req,res)=>{
+  try{
+    const history = await Analysis.find({userId:req.user.id})
+  
+  res.json(history)}
+ catch(err){
+  res.status(500).json({ message: err.message })
+}}
+)
+
 module.exports = router
