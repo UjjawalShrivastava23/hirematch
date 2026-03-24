@@ -16,6 +16,7 @@ app.get('/', (req, res) => {
 });
 
 // Connect to MongoDB then start server
+console.log("CHECKING URI:", process.env.MONGO_URI);
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
     console.log('MongoDB connected');
