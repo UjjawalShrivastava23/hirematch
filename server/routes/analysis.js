@@ -18,7 +18,7 @@ router.post('/run', authmid, upload.single('resume'), async (req, res) => {
     formdata.append('resume', file_buffer, 'resume.pdf')
     formdata.append('job_description', job_description)
 
-    const response = await axios.post('http://localhost:5001/analyze', formdata, {
+    const response = await axios.post('https://hirematch-ml.onrender.com/analyze', formdata, {
       headers: formdata.getHeaders()
     })
     const result = response.data
