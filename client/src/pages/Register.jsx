@@ -11,7 +11,7 @@ function Register(){
 
   async  function clickSubmit(){
     try{
-        const response = await axios.post('http://localhost:8000/api/auth/register',{
+        const response = await axios.post('https://hirematch-backend.onrender.com/api/auth/register',{
             name : name,
             email : email,
             password : password

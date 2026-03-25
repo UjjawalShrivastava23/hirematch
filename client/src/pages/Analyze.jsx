@@ -12,7 +12,7 @@ function Analyze(){
         formData.append('job_description', jobdescription)
         
         const token = localStorage.getItem('token')
-        const response = await axios.post('http://localhost:8000/api/analysis/run', formData, {
+        const response = await axios.post('https://hirematch-backend.onrender.com/api/analysis/run', formData, {
           headers: { Authorization: `Bearer ${token}` }
         })
         setResult(response.data)

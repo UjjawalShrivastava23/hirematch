@@ -7,7 +7,7 @@ function History(){
     useEffect(()=>{
         async function fetchhistory(){
             const token = localStorage.getItem('token')
-        const response =  await axios.get('http://localhost:8000/api/analysis/history' ,{
+        const response =  await axios.get('https://hirematch-backend.onrender.com/api/auth/history' ,{
          headers : {Authorization : `Bearer ${token}`}})
          sethistory(response.data)
     }
