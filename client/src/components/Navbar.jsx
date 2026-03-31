@@ -1,13 +1,16 @@
-
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 function Navbar(){
 const navigate = useNavigate()
- function Logout(){
+const location = useLocation()
+const token = localStorage.getItem('token')
 
-   
-    localStorage.removeItem('token' ),
-    localStorage.removeItem('user',)
-    
+if (location.pathname === '/login' || location.pathname === '/register') {
+  return null
+}
+
+ function Logout(){
+    localStorage.removeItem('token')
+    localStorage.removeItem('user')
     navigate('/login')
 }
 
@@ -17,11 +20,24 @@ return(
         HireMatch 🎯
       </span>
       <div className="flex items-center gap-6">
-        <span className="text-slate-300 hover:text-white cursor-pointer text-sm" onClick={() => navigate('/analyze')}>Analyze</span>
-        <span className="text-slate-300 hover:text-white cursor-pointer text-sm" onClick={() => navigate('/history')}>History</span>
-        <button onClick={Logout} className="bg-slate-700 hover:bg-slate-600 text-white text-sm px-4 py-2 rounded-lg transition-colors">
-          Logout
-        </button>
+        {token ? (
+          <>
+            <span className="text-slate-300 hover:text-white cursor-pointer text-sm" onClick={() => navigate('/analyze')}>Analyze</span>
+            <span className="text-slate-300 hover:text-white cursor-pointer text-sm" onClick={() => navigate('/history')}>History</span>
+            <button onClick={Logout} className="bg-slate-700 hover:bg-slate-600 text-white text-sm px-4 py-2 rounded-lg transition-colors">
+              Logout
+            </button>
+          </>
+        ) : (
+          <>
+            <button onClick={() => navigate('/login')} className="text-slate-300 hover:text-white text-sm">
+              Login
+            </button>
+            <button onClick={() => navigate('/register')} className="bg-blue-600 hover:bg-blue-500 text-white text-sm px-4 py-2 rounded-lg transition-colors">
+              Register
+            </button>
+          </>
+        )}
       </div>
     </nav>
 

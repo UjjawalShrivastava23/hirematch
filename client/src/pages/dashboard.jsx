@@ -4,15 +4,18 @@ function Dashboard(){
     const navigate = useNavigate()
     useEffect(() => {
         const token = localStorage.getItem('token')
-        if (!token) navigate('/login')
-      }, [])
-   const user = JSON.parse(localStorage.getItem('user'))
+        if (!token) {
+          navigate('/login', { replace: true })
+        }
+      }, [navigate])
+   const storedUser = localStorage.getItem('user')
+   const user = storedUser ? JSON.parse(storedUser) : null
    return (
     <div className="max-w-7xl mx-auto px-6 py-12">
       
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-white">Welcome back, {user ? user.name : ''} 👋</h1>
+          <h1 className="text-3xl font-bold text-white">Welcome back, {user?.name || user?.email || 'Candidate'} 👋</h1>
           <p className="text-slate-400 mt-2">Ready to land your next role? Let's check your resume fit.</p>
         </div>
         <button 

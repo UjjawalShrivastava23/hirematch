@@ -12,6 +12,15 @@ const upload = multer({storage})
 router.post('/run', authmid, upload.single('resume'), async (req, res) => {
   try {
     const job_description = req.body.job_description
+
+    if (!req.file) {
+      return res.status(400).json({ message: 'Resume file is required' })
+    }
+
+    if (!job_description) {
+      return res.status(400).json({ message: 'Job description is required' })
+    }
+
     const file_buffer = req.file.buffer
 
     const formdata = new FormData()

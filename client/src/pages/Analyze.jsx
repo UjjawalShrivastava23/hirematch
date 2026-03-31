@@ -1,23 +1,50 @@
-import { useState } from "react";
-import axios from 'axios'
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import api, { getErrorMessage } from "../lib/api";
 
 function Analyze(){
-    const[selectedfiles , setselectedfiles] = useState('')
+    const[selectedfiles , setselectedfiles] = useState(null)
     const [jobdescription , setjobdescription] = useState('')
-    const [Result , setResult]=useState('')
+    const [Result , setResult]=useState(null)
+    const [errorMessage, setErrorMessage] = useState('')
+    const [isSubmitting, setIsSubmitting] = useState(false)
+    const navigate = useNavigate()
+
+    useEffect(() => {
+      const token = localStorage.getItem('token')
+      if (!token) {
+        navigate('/login', { replace: true })
+      }
+    }, [navigate])
+
     async function handlesubmit() {
+        setErrorMessage('')
+
+        if (!selectedfiles) {
+          setErrorMessage('Please upload your resume before running the analysis.')
+          return
+        }
+
+        if (!jobdescription.trim()) {
+          setErrorMessage('Please paste a job description before running the analysis.')
+          return
+        }
+
+        setIsSubmitting(true)
         try{
         const formData = new FormData()
         formData.append('resume', selectedfiles)
         formData.append('job_description', jobdescription)
         
         const token = localStorage.getItem('token')
-        const response = await axios.post('https://hirematch-backend.onrender.com/api/analysis/run', formData, {
+        const response = await api.post('/analysis/run', formData, {
           headers: { Authorization: `Bearer ${token}` }
         })
         setResult(response.data)
       }catch(error){
-
+        setErrorMessage(getErrorMessage(error, 'Unable to analyze your resume right now.'))
+      } finally {
+        setIsSubmitting(false)
       }}
       return (
         <div className="max-w-4xl mx-auto px-6 py-12">
@@ -43,12 +70,15 @@ function Analyze(){
                   className="w-full bg-slate-900 border border-slate-600 text-white placeholder-slate-500 rounded-xl p-4 h-40 focus:outline-none focus:border-blue-500"
                 />
               </div>
+
+              {errorMessage && <p className="text-sm text-red-400">{errorMessage}</p>}
     
               <button 
                 onClick={handlesubmit} 
+                disabled={isSubmitting}
                 className="bg-blue-600 hover:bg-blue-500 text-white font-semibold py-3 rounded-xl transition-colors w-full"
               >
-                Analyze Match
+                {isSubmitting ? 'Analyzing...' : 'Analyze Match'}
               </button>
             </div>
           </div>

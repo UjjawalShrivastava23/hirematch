@@ -1,18 +1,32 @@
 import { useState } from "react";
 import { useEffect } from "react";
-import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import api, { getErrorMessage } from "../lib/api";
 
 function History(){
     const[history , sethistory]=useState([])
+    const [errorMessage, setErrorMessage] = useState('')
+    const navigate = useNavigate()
     useEffect(()=>{
         async function fetchhistory(){
+            setErrorMessage('')
             const token = localStorage.getItem('token')
-        const response =  await axios.get('https://hirematch-backend.onrender.com/api/auth/history' ,{
-         headers : {Authorization : `Bearer ${token}`}})
-         sethistory(response.data)
+
+            if (!token) {
+              navigate('/login', { replace: true })
+              return
+            }
+
+        try {
+          const response =  await api.get('/analysis/history' ,{
+           headers : {Authorization : `Bearer ${token}`}})
+           sethistory(response.data)
+        } catch (error) {
+          setErrorMessage(getErrorMessage(error, 'Unable to load your history right now.'))
+        }
     }
     fetchhistory()
-},[])
+},[navigate])
   
 
 return (
@@ -21,6 +35,7 @@ return (
       
     <div>
       <h1 className="text-3xl font-bold text-white mb-8">Your Analysis History</h1>
+      {errorMessage && <p className="text-sm text-red-400 mb-6">{errorMessage}</p>}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {history.map((item) => (
         <div className="bg-slate-800 border border-slate-700 rounded-2xl p-6 hover:border-blue-500 transition-colors" key={item._id}>
@@ -30,6 +45,9 @@ return (
         </div>
       ))}
     </div>
+    {!errorMessage && history.length === 0 && (
+      <p className="text-slate-400 mt-6">No analyses yet. Run your first resume check from the Analyze page.</p>
+    )}
     </div>
     </div>
     
